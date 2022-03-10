@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Photo from './components/Photo';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaArrowCircleUp } from 'react-icons/fa';
 
 const clientID = `?client_id=${process.env.REACT_APP_ACCESS_KEY}`;
 const mainURL = `https://api.unsplash.com/photos/`;
@@ -9,6 +9,7 @@ const searchURL = `https://api.unsplash.com/search/photos/`;
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const [backToTop, showBackToTop] = useState(false);
 
   const fetchImages = async () => {
     try {
@@ -19,19 +20,33 @@ const App = () => {
       const data = await response.json();
       setPhotos(data);
       setLoading(false);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchImages();
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 100) {
+        showBackToTop(true);
+      } else {
+        showBackToTop(false);
+      }
+    });
   }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
     console.log('hello');
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   return (
@@ -71,6 +86,11 @@ const App = () => {
         })}
       </section>
       {loading && <h2 className="text-6xl container mx-auto">Loading......</h2>}
+      {backToTop && (
+        <button onClick={scrollToTop} className="back-to-top">
+          <FaArrowCircleUp size={50} />
+        </button>
+      )}
     </main>
   );
 };
