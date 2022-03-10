@@ -10,7 +10,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [backToTop, showBackToTop] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(5);
 
   const fetchImages = async () => {
     try {
